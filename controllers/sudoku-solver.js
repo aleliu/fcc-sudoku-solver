@@ -112,10 +112,5 @@ class SudokuSolver {
     return this.backtrackSolving(puzzleString)
   }
 }
-let ss = new SudokuSolver();
-let puzzleString = "123456789456789123789123456214365897365897214897214365542931678638572941971648..."
-// let puzzleString = "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6.."
-let a = ss.solve(puzzleString)
-console.log(a)
 
 module.exports = SudokuSolver;

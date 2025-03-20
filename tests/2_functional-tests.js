@@ -61,7 +61,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], coor: "a2", val: 3})
+            .send({puzzle: puzzles[0][0], coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "valid": true });
@@ -71,7 +71,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], coor: "z2", val: 3})
+            .send({puzzle: puzzles[0][0], coordinate: "z2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid coordinate" });
@@ -81,7 +81,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: "1.5..2.84..63.12.7.2..5.....z..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.", coor: "Z2", val: 3})
+            .send({puzzle: "1.5..2.84..63.12.7.2..5.....z..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.", coordinate: "Z2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid characters in puzzle" });
@@ -91,7 +91,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: "1.5..2.84..63.12.7.2..5........1....8.2.3674.3.7.2..9.47...8..1..16....926914.37..", coor: "N2", val: '3z'})
+            .send({puzzle: "1.5..2.84..63.12.7.2..5........1....8.2.3674.3.7.2..9.47...8..1..16....926914.37..", coordinate: "N2", value: '3z'})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Expected puzzle to be 81 characters long" });
@@ -101,7 +101,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], val: 3})
+            .send({puzzle: puzzles[0][0], value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Required field(s) missing" });
@@ -111,7 +111,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: "..9..5.1.85.4....2z32......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..", coor: "a2", val: 3})
+            .send({puzzle: "..9..5.1.85.4....2z32......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..", coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid characters in puzzle" });
@@ -121,7 +121,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6...", coor: "a2", val: 3})
+            .send({puzzle: "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6...", coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Expected puzzle to be 81 characters long" });
@@ -131,7 +131,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzle[2][0], coor: "a0", val: 3})
+            .send({puzzle: puzzle[2][0], coordinate: "a0", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid coordinate" });
@@ -141,7 +141,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], coor: "a2", val: "Z"})
+            .send({puzzle: puzzles[0][0], coordinate: "a2", value: "Z"})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid value" });

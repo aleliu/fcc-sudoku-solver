@@ -43,6 +43,8 @@ module.exports = function (app) {
     
   app.route('/api/solve')
     .post((req, res) => {
-
+      const solver = new SudokuSolver();
+      let puzzle = req.body.puzzle;
+      
     });
 };

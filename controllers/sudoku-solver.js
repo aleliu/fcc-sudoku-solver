@@ -29,11 +29,27 @@ class SudokuSolver {
   }
 
   validate(puzzleString) {
-    let strangeCharacter = puzzleString.match(/[^0-9\.]/);
-    if (strangeCharacter) {
-      return "no valid puzzle";
+    let row, col;
+    let valid = true;
+    if (puzzleString.length == 81){
+      return { "error": "Expected puzzle to be 81 characters long" }
+    }
+    if (puzzleString.match(/[^0-9\.]/)){
+      return { "error": "Invalid characters in puzzle" }
+      
+    }
+    puzzleString.forEach((val, i) => {
+      if (val != "."){
+        [row, col] - this.getCordinate(i);
+        valid &&= this.checkRowPlacement(puzzleString, row, col, val);
+        valid &&= this.checkColPlacement(puzzleString, row, col, val);
+        valid &&= this.checkAreaPlacement(puzzleString, row, col, val);
+      }
+    });
+    if (valid) {
+      return {valid}
     } else {
-      return "valid puzzle";
+      return { "error": "Puzzle cannot be solved" }
     }
   }
 
@@ -58,9 +74,9 @@ class SudokuSolver {
 
     let rowNumber = Math.ceil((number + 1) / 9) - 1;
     let row = "abcdefghi"[rowNumber];
-    let column = number-rowNumber*9 + 1;
+    let column = number - rowNumber * 9 + 1;
     if(join){
-      return row+column
+      return row + column
     } else {
       return [row, column]
     }

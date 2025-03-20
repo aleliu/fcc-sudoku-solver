@@ -29,51 +29,54 @@ class SudokuSolver {
   }
 
   validate(puzzleString) {
-    let strangeCharacter = puzzleString.match(/[^0-9\.]/);
-    if (strangeCharacter) {
-      return "no valid puzzle";
+    let row, col;
+    let valid = true;
+    if (puzzleString.length == 81){
+      return { "error": "Expected puzzle to be 81 characters long" }
+    }
+    if (puzzleString.match(/[^0-9\.]/)){
+      return { "error": "Invalid characters in puzzle" }
+      
+    }
+    puzzleString.forEach((val, i) => {
+      if (val != "."){
+        [row, col] - this.getCordinate(i);
+        valid &&= this.checkRowPlacement(puzzleString, row, col, val);
+        valid &&= this.checkColPlacement(puzzleString, row, col, val);
+        valid &&= this.checkAreaPlacement(puzzleString, row, col, val);
+      }
+    });
+    if (valid) {
+      return {valid}
     } else {
-      return "valid puzzle";
+      return { "error": "Puzzle cannot be solved" }
     }
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
     let puzzleRow = this.getPlacementFromPoint(puzzleString, "row", row, column);
-    if (puzzleRow[column - 1] == value || puzzleRow.indexOf(value) == -1) {
-      return "row valid";
-    } else {
-      return "row invalid";
-    }
+    return puzzleRow[column - 1] == value || puzzleRow.indexOf(value) == -1;
   }
 
   checkColPlacement(puzzleString, row, column, value) {
     let numberRow = "abcdefghi".indexOf(row.toLowerCase());
     let puzzleColumn = this.getPlacementFromPoint(puzzleString, "column", row, column);
-    if (puzzleColumn[numberRow - 1] == value || puzzleColumn.indexOf(value) == -1) {
-      return "column valid";
-    } else {
-      return "column invalid";
-    }
+    return puzzleColumn[numberRow - 1] == value || puzzleColumn.indexOf(value) == -1;
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
     let numberRow = "abcdefghi".indexOf(row.toLowerCase()) + 1;
     let puzzleArea = this.getPlacementFromPoint(puzzleString, "area", row, column);
-    
-    if (puzzleString[(numberRow - 1) * 9 + column - 1] == value || puzzleArea.indexOf(value) == -1) {
-      return "area valid";
-    } else {
-      return "area invalid";
-    }
+    return puzzleString[(numberRow - 1) * 9 + column - 1] == value || puzzleArea.indexOf(value) == -1;
   }
 
   getCordinate(number, join=true){
 
     let rowNumber = Math.ceil((number + 1) / 9) - 1;
     let row = "abcdefghi"[rowNumber];
-    let column = number-rowNumber*9 + 1;
+    let column = number - rowNumber * 9 + 1;
     if(join){
-      return row+column
+      return row + column
     } else {
       return [row, column]
     }

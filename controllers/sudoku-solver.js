@@ -39,32 +39,19 @@ class SudokuSolver {
 
   checkRowPlacement(puzzleString, row, column, value) {
     let puzzleRow = this.getPlacementFromPoint(puzzleString, "row", row, column);
-    if (puzzleRow[column - 1] == value || puzzleRow.indexOf(value) == -1) {
-      return "row valid";
-    } else {
-      return "row invalid";
-    }
+    return puzzleRow[column - 1] == value || puzzleRow.indexOf(value) == -1;
   }
 
   checkColPlacement(puzzleString, row, column, value) {
     let numberRow = "abcdefghi".indexOf(row.toLowerCase());
     let puzzleColumn = this.getPlacementFromPoint(puzzleString, "column", row, column);
-    if (puzzleColumn[numberRow - 1] == value || puzzleColumn.indexOf(value) == -1) {
-      return "column valid";
-    } else {
-      return "column invalid";
-    }
+    return puzzleColumn[numberRow - 1] == value || puzzleColumn.indexOf(value) == -1;
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
     let numberRow = "abcdefghi".indexOf(row.toLowerCase()) + 1;
     let puzzleArea = this.getPlacementFromPoint(puzzleString, "area", row, column);
-    
-    if (puzzleString[(numberRow - 1) * 9 + column - 1] == value || puzzleArea.indexOf(value) == -1) {
-      return "area valid";
-    } else {
-      return "area invalid";
-    }
+    return puzzleString[(numberRow - 1) * 9 + column - 1] == value || puzzleArea.indexOf(value) == -1;
   }
 
   getCordinate(number, join=true){

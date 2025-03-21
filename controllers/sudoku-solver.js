@@ -31,6 +31,9 @@ class SudokuSolver {
   validate(puzzleString) {
     let row, col;
     let valid = true;
+    if (puzzleString == undefined){
+      return { "error": "Required field missing" }
+    }
     if (puzzleString.length == 81){
       return { "error": "Expected puzzle to be 81 characters long" }
     }

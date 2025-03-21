@@ -8,7 +8,7 @@ module.exports = function (app) {
 
   app.route('/api/check')
     .post((req, res) => {
-      let row, col, rowChecker, colChecker, areaChecker, result;
+      let row, col, rowChecker, colChecker, areaChecker, result, valid;
       const solver = new SudokuSolver();
       let value = req.body.value;
       let puzzle = req.body.puzzle;
@@ -21,6 +21,10 @@ module.exports = function (app) {
         row += 1;
       }
       if ( col < 1 || col > 9) return res.json({ "error": "Invalid coordinate" });
+      valid = solver.validate(puzzle);
+      if ( valid.error !== undefined ){
+        return valid
+      }
       rowChecker = solver.checkRowPlacement(puzzle, row, col, value);
       colChecker = solver.checkColPlacement(puzzle, row, col, value);
       areaChecker = solver.checkRegionPlacement(puzzle, row, col, value);

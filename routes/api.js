@@ -57,6 +57,6 @@ module.exports = function (app) {
     .post((req, res) => {
       const solver = new SudokuSolver();
       let puzzle = req.body.puzzle;
-      return res.json(solver.solve(puzzle));
+      return res.json({solution: solver.solve(puzzle)});
     });
 };

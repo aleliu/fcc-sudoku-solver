@@ -51,7 +51,7 @@ class SudokuSolver {
     let row, col;
     let valid = true;
     if (puzzleString == undefined || puzzleString == ''){
-      return { "error": "Required field(s) missing" }
+      return { "error": "Required field missing" }
     }
     if (puzzleString.length != 81){
       return { "error": "Expected puzzle to be 81 characters long" }

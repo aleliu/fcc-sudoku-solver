@@ -22,10 +22,9 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/solve')
-            .send({})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { error: "Required field(s) missing" });
+                assert.deepEqual(res.body, { error: 'Required field missing' });
                 done();
             });
     });

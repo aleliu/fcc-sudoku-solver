@@ -39,9 +39,8 @@ class SudokuSolver {
     }
     if (puzzleString.match(/[^0-9\.]/)){
       return { "error": "Invalid characters in puzzle" }
-      
     }
-    puzzleString.forEach((val, i) => {
+    puzzleString.split('').forEach((val, i) => {
       if (val != "."){
         [row, col] - this.getCordinate(i);
         valid &&= this.checkRowPlacement(puzzleString, row, col, val);
@@ -106,7 +105,7 @@ class SudokuSolver {
         return newPuzzleString
       } else {
         result = this.backtrackSolving(newPuzzleString);
-        if (result.indexOf('.') == -1){
+        if (result?.indexOf('.') == -1){
           return result
         } 
       }

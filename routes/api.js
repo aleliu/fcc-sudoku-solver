@@ -49,6 +49,11 @@ module.exports = function (app) {
     .post((req, res) => {
       const solver = new SudokuSolver();
       let puzzle = req.body.puzzle;
-      
+      let valid = solver.validate(puzzle);
+      if (valid.error !== undefined){
+        return valid
+      } else {
+        return solver.solve(puzzle);
+      } 
     });
 };

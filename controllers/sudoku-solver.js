@@ -58,18 +58,21 @@ class SudokuSolver {
 
   checkRowPlacement(puzzleString, row, column, value) {
     let puzzleRow = this.getPlacementFromPoint(puzzleString, "row", row, column);
+    if (puzzleRow == false) return false;
     return puzzleRow[column - 1] == value || puzzleRow.indexOf(value) == -1;
   }
 
   checkColPlacement(puzzleString, row, column, value) {
     let numberRow = "abcdefghi".indexOf(row.toLowerCase());
     let puzzleColumn = this.getPlacementFromPoint(puzzleString, "column", row, column);
+    if (puzzleColumn == false) return false;
     return puzzleColumn[numberRow - 1] == value || puzzleColumn.indexOf(value) == -1;
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
     let numberRow = "abcdefghi".indexOf(row.toLowerCase()) + 1;
     let puzzleArea = this.getPlacementFromPoint(puzzleString, "area", row, column);
+    if (puzzleArea == false) return false;
     return puzzleString[(numberRow - 1) * 9 + column - 1] == value || puzzleArea.indexOf(value) == -1;
   }
 

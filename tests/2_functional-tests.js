@@ -1,7 +1,7 @@
 const chai = require("chai");
 const chaiHttp = require('chai-http');
 const assert = chai.assert;
-const puzzles = require('../controllers/puzzle-strings.js');
+const { puzzlesAndSolutions } = require('../controllers/puzzle-strings.js');
 const server = require('../server');
 
 chai.use(chaiHttp);
@@ -11,10 +11,10 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/solve')
-            .send({puzzle: puzzles[0][0]})
+            .send({puzzle: puzzlesAndSolutions[0][0]})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.body, puzzles[0][1]);
+                assert.equal(res.body, puzzlesAndSolutions[0][1]);
                 done();
             });
     });
@@ -44,7 +44,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/solve')
-            .send({puzzle: puzzles[0][0]+"2"})
+            .send({puzzle: puzzlesAndSolutions[0][0]+"2"})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Expected puzzle to be 81 characters long" });
@@ -66,7 +66,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], coordinate: "a2", value: 3})
+            .send({puzzle: puzzlesAndSolutions[0][0], coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "valid": true });
@@ -77,7 +77,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], coordinate: "z2", value: 3})
+            .send({puzzle: puzzlesAndSolutions[0][0], coordinate: "z2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid coordinate" });
@@ -110,7 +110,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], value: 3})
+            .send({puzzle: puzzlesAndSolutions[0][0], value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Required field(s) missing" });
@@ -154,7 +154,7 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzles[0][0], coordinate: "a2", value: "Z"})
+            .send({puzzle: puzzlesAndSolutions[0][0], coordinate: "a2", value: "Z"})
             .end((err, res) => {
                 assert.equal(res.status, 200);
                 assert.deepEqual(res.body, { "error": "Invalid value" });

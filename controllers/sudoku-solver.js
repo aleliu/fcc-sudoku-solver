@@ -29,6 +29,15 @@ class SudokuSolver {
     return result;
   }
 
+  validatePoint(puzzleString, coordinate, value){
+    let numbersUsed;
+    ['row', 'column', 'area'].forEach((type) => {
+      numbersUsed += this.getPlacementFromPoint(puzzleString, type, coordinate);
+    });
+    numbersUsed = [...new Set(numbersUsed.split("").map(Number))];
+    return !numbersUsed.includes(value);
+  }
+
   validate(puzzleString) {
     let row, col;
     let valid = true;
@@ -43,10 +52,8 @@ class SudokuSolver {
     }
     puzzleString.split('').forEach((val, i) => {
       if (val != "."){
-        [row, col] - this.getCordinate(i);
-        valid &&= this.checkRowPlacement(puzzleString, row, col, val);
-        valid &&= this.checkColPlacement(puzzleString, row, col, val);
-        valid &&= this.checkAreaPlacement(puzzleString, row, col, val);
+        [row, col] = this.getCordinate(i);
+        valid &&= this.validatePoint(puzzleString, row+col, val);
       }
     });
     if (valid) {

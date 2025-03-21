@@ -23,7 +23,7 @@ module.exports = function (app) {
       numberRow = "abcdefghi".indexOf(row.toLowerCase());
       col = Number(col);
       if(!value) return res.json({error: "Invalid value"})
-      if (numberRow == -1){
+      if (numberRow == -1 || !col){
         return res.json({ "error": "Invalid coordinate" });
       } else {
         numberRow += 1;

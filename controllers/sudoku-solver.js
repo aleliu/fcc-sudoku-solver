@@ -3,6 +3,7 @@ class SudokuSolver {
   getPlacementFromPoint(puzzleString, type, row, column=""){
     let result = "";
     let numberRow;
+    if (!row) return false;
     if (row.length == 2) {
       [row, column] = row.split('');
       column = Number(column)
@@ -34,7 +35,7 @@ class SudokuSolver {
     if (puzzleString == undefined){
       return { "error": "Required field missing" }
     }
-    if (puzzleString.length == 81){
+    if (puzzleString.length != 81){
       return { "error": "Expected puzzle to be 81 characters long" }
     }
     if (puzzleString.match(/[^0-9\.]/)){
@@ -105,16 +106,20 @@ class SudokuSolver {
         return newPuzzleString
       } else {
         result = this.backtrackSolving(newPuzzleString);
-        if (result?.indexOf('.') == -1){
-          return result
-        } 
+        if (result != false){
+          if (result.indexOf('.') == -1){
+            return result;
+          }
+        }
       }
     };
     return false
   }
 
   solve(puzzleString) {
-    return this.backtrackSolving(puzzleString)
+    let valid = this.validate(puzzleString);
+    if (valid.error != undefined) return valid;
+    return this.backtrackSolving(puzzleString);
   }
 }
 

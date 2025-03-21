@@ -8,7 +8,7 @@ module.exports = function (app) {
 
   app.route('/api/check')
     .post((req, res) => {
-      let row, col, rowChecker, colChecker, areaChecker, result, valid, numberRow;
+      let row, col, rowChecker, colChecker, areaChecker, result, valid, numberRow, coordinate;
       const solver = new SudokuSolver();
       let value = req.body.value;
       let puzzle = req.body.puzzle;
@@ -19,15 +19,15 @@ module.exports = function (app) {
         return res.json(validatePuzzle)
       }
       value = Number(value);
-      [row, col] = req.body.coordinate.split('');
+      coordinate = req.body.coordinate;
+      if(!/^[a-iA-I][1-9]$/.test(coordinate)){
+        return res.json({ "error": "Invalid coordinate" });
+      }
+      [row, col] = coordinate.split('');
       numberRow = "abcdefghi".indexOf(row.toLowerCase());
       col = Number(col);
-      if(!value) return res.json({error: "Invalid value"})
-      if (numberRow == -1 || !col){
-        return res.json({ "error": "Invalid coordinate" });
-      } else {
-        numberRow += 1;
-      }
+      if(!value || value > 9 || value < 1) return res.json({error: "Invalid value"})
+      numberRow += 1;
       if ( col < 1 || col > 9) return res.json({ "error": "Invalid coordinate" });
       valid = solver.validate(puzzle);
       if ( valid.error !== undefined ){

@@ -25,7 +25,7 @@ suite('Functional Tests', () => {
             .send({})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Required field missing" });
+                assert.deepEqual(res.body, { error: "Required field(s) missing" });
                 done();
             });
     });
@@ -36,7 +36,7 @@ suite('Functional Tests', () => {
             .send({puzzle: "..9..5.1.85.4....2432......1...J9.83.9.....6.62.71...9......1945....4.37.4.3..6.."})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Invalid characters in puzzle" });
+                assert.deepEqual(res.body, { error: "Invalid characters in puzzle" });
                 done();
             });
     });
@@ -47,7 +47,7 @@ suite('Functional Tests', () => {
             .send({puzzle: puzzlesAndSolutions[0][0]+"2"})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Expected puzzle to be 81 characters long" });
+                assert.deepEqual(res.body, { error: "Expected puzzle to be 81 characters long" });
                 done();
             });
     });
@@ -58,7 +58,7 @@ suite('Functional Tests', () => {
             .send({puzzle: "..9..9.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6.."})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Puzzle cannot be solved" });
+                assert.deepEqual(res.body, { error: "Puzzle cannot be solved" });
                 done();
             });
     });
@@ -69,7 +69,7 @@ suite('Functional Tests', () => {
             .send({puzzle: puzzlesAndSolutions[0][0], coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "valid": true });
+                assert.deepEqual(res.body, { valid: true });
                 done();
             });
     });
@@ -80,7 +80,7 @@ suite('Functional Tests', () => {
             .send({puzzle: puzzlesAndSolutions[0][0], coordinate: "z2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Invalid coordinate" });
+                assert.deepEqual(res.body, { error: "Invalid coordinate" });
                 done();
             });
     });
@@ -88,10 +88,10 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: "1.5..2.84..63.12.7.2..5.....z..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.", coordinate: "Z2", value: 3})
+            .send({puzzle: "1.5..2.84..63.12.Z..2..5.....z..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.", coordinate: "Z0", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Invalid characters in puzzle" });
+                assert.deepEqual(res.body, { error: "Expected puzzle to be 81 characters long" });
                 done();
             });
     });
@@ -102,7 +102,7 @@ suite('Functional Tests', () => {
             .send({puzzle: "1.5..2.84..63.12.7.2..5........1....8.2.3674.3.7.2..9.47...8..1..16....926914.37..", coordinate: "N2", value: '3z'})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Expected puzzle to be 81 characters long" });
+                assert.deepEqual(res.body, { error: "Expected puzzle to be 81 characters long" });
                 done();
             });
     });
@@ -113,7 +113,7 @@ suite('Functional Tests', () => {
             .send({puzzle: puzzlesAndSolutions[0][0], value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Required field(s) missing" });
+                assert.deepEqual(res.body, { error: "Required field(s) missing" });
                 done();
             });
     });
@@ -124,7 +124,7 @@ suite('Functional Tests', () => {
             .send({puzzle: "..9..5.1.85.4....2z32......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..", coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Invalid characters in puzzle" });
+                assert.deepEqual(res.body, { error: "Invalid characters in puzzle" });
                 done();
             });
     });
@@ -135,7 +135,7 @@ suite('Functional Tests', () => {
             .send({puzzle: "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6...", coordinate: "a2", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Expected puzzle to be 81 characters long" });
+                assert.deepEqual(res.body, { error: "Expected puzzle to be 81 characters long" });
                 done();
             });
     });
@@ -143,10 +143,10 @@ suite('Functional Tests', () => {
         chai
             .request(server)
             .post('/api/check')
-            .send({puzzle: puzzle[2][0], coordinate: "a0", value: 3})
+            .send({puzzle: puzzlesAndSolutions[2][0], coordinate: "a0", value: 3})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Invalid coordinate" });
+                assert.deepEqual(res.body, { error: "Invalid coordinate" });
                 done();
             });
     });
@@ -157,9 +157,8 @@ suite('Functional Tests', () => {
             .send({puzzle: puzzlesAndSolutions[0][0], coordinate: "a2", value: "Z"})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.deepEqual(res.body, { "error": "Invalid value" });
+                assert.deepEqual(res.body, { error: "Invalid value" });
                 done();
             });
     });
 });
-

@@ -15,15 +15,23 @@ class SudokuSolver {
     }
     if (type == "row"){
       result = puzzleString.slice(numberRow * 9, (numberRow + 1) * 9);
+      result = result.slice(0, column - 1) + result.slice(column)
     } else if (type == "column" ){
       for (let i=0; i < 9; i++) {
-        result += puzzleString[9 * i + column - 1];
+        if(i != numberRow) {
+          result += puzzleString[9 * i + column - 1];
+        }
       }  
     } else if (type == "area") {
       let rowQuadrant = 3 * (Math.ceil((numberRow + 1) / 3) - 1);
       let colQuadrant = 3 * (Math.ceil(column / 3) - 1);
       for (let i = rowQuadrant; i < rowQuadrant + 3; i++) {
-        result += puzzleString.slice(9 * i + colQuadrant, (9 * i) + colQuadrant + 3);
+        if(i == numberRow) {
+          result += puzzleString.slice(9 * i + colQuadrant, 9 * i + column - 1);
+          result += puzzleString.slice(9 * i + column, 9 * i + colQuadrant + 3);
+        } else {
+          result += puzzleString.slice(9 * i + colQuadrant, 9 * i + colQuadrant + 3);
+        }
       }
     }
     return result;
@@ -34,6 +42,7 @@ class SudokuSolver {
     ['row', 'column', 'area'].forEach((type) => {
       numbersUsed += this.getPlacementFromPoint(puzzleString, type, coordinate);
     });
+    value = Number(value);
     numbersUsed = [...new Set(numbersUsed.split("").map(Number))];
     return !numbersUsed.includes(value);
   }
@@ -42,7 +51,7 @@ class SudokuSolver {
     let row, col;
     let valid = true;
     if (puzzleString == undefined){
-      return { "error": "Required field missing" }
+      return { "error": "Required field(s) missing" }
     }
     if (puzzleString.length != 81){
       return { "error": "Expected puzzle to be 81 characters long" }
@@ -56,10 +65,10 @@ class SudokuSolver {
         valid &&= this.validatePoint(puzzleString, row+col, val);
       }
     });
-    if (valid) {
-      return {valid}
-    } else {
+    if (!valid){
       return { "error": "Puzzle cannot be solved" }
+    } else {
+      return {valid}
     }
   }
 
@@ -84,7 +93,6 @@ class SudokuSolver {
   }
 
   getCordinate(number, join=true){
-
     let rowNumber = Math.ceil((number + 1) / 9) - 1;
     let row = "abcdefghi"[rowNumber];
     let column = number - rowNumber * 9 + 1;
@@ -93,6 +101,15 @@ class SudokuSolver {
     } else {
       return [row, column]
     }
+  }
+
+  getIndex(coordinate){
+    let row, col, rowNumber;
+    [row, col] = coordinate.split('');
+    col = Number(col)
+    col -= 1;
+    rowNumber = "abcdefghi".indexOf(row.toLowerCase());
+    return col + rowNumber * 9;
   }
 
   backtrackSolving(puzzleString){

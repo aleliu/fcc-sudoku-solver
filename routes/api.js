@@ -8,22 +8,30 @@ module.exports = function (app) {
 
   app.route('/api/check')
     .post((req, res) => {
-      let row, col, rowChecker, colChecker, areaChecker, result, valid;
+      let row, col, rowChecker, colChecker, areaChecker, result, valid, numberRow;
       const solver = new SudokuSolver();
       let value = req.body.value;
       let puzzle = req.body.puzzle;
+      
+      if (!("puzzle" in req.body) || !("coordinate" in req.body) || !("value" in req.body)) return res.json({ error: 'Required field(s) missing' })
+      value = Number(value);
       [row, col] = req.body.coordinate.split('');
-      row = "abcdefghi".indexOf(row.toLowerCase());
+      numberRow = "abcdefghi".indexOf(row.toLowerCase());
       col = Number(col);
-      if (row == -1){
+      let validatePuzzle = solver.validate(puzzle);
+      if (validatePuzzle.error != undefined){
+        return res.json(validatePuzzle)
+      }
+      if(!value) return res.json({error: "Invalid value"})
+      if (numberRow == -1){
         return res.json({ "error": "Invalid coordinate" });
       } else {
-        row += 1;
+        numberRow += 1;
       }
       if ( col < 1 || col > 9) return res.json({ "error": "Invalid coordinate" });
       valid = solver.validate(puzzle);
       if ( valid.error !== undefined ){
-        return valid
+        return res.json({valid: valid})
       }
       rowChecker = solver.checkRowPlacement(puzzle, row, col, value);
       colChecker = solver.checkColPlacement(puzzle, row, col, value);
@@ -49,11 +57,6 @@ module.exports = function (app) {
     .post((req, res) => {
       const solver = new SudokuSolver();
       let puzzle = req.body.puzzle;
-      let valid = solver.validate(puzzle);
-      if (valid.error !== undefined){
-        return valid
-      } else {
-        return solver.solve(puzzle);
-      } 
+      return res.json(solver.solve(puzzle));
     });
 };

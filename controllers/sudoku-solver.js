@@ -50,7 +50,7 @@ class SudokuSolver {
   validate(puzzleString) {
     let row, col;
     let valid = true;
-    if (puzzleString == undefined){
+    if (puzzleString == undefined || puzzleString == ''){
       return { "error": "Required field(s) missing" }
     }
     if (puzzleString.length != 81){
@@ -146,7 +146,7 @@ class SudokuSolver {
   solve(puzzleString) {
     let valid = this.validate(puzzleString);
     if (valid.error != undefined) return valid;
-    return this.backtrackSolving(puzzleString);
+    return {solution: this.backtrackSolving(puzzleString)};
   }
 }
 

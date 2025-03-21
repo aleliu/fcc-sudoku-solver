@@ -54,7 +54,7 @@ suite('Unit Tests', () => {
     });
     test('Valid puzzle strings pass the solver', (done) => {
         let solution = solver.solve(puzzlesAndSolutions[0][0]);
-        assert.deepEqual(solution, puzzlesAndSolutions[0][1]);
+        assert.deepEqual(solution, {solution: puzzlesAndSolutions[0][1]});
         done();
     });
     test('Invalid puzzle strings fail the solver', (done) => {
@@ -64,7 +64,7 @@ suite('Unit Tests', () => {
     });
     test('Solver returns the expected solution for an incomplete puzzle', (done) => {
         let solution = solver.solve(puzzlesAndSolutions[1][0]);
-        assert.equal(solution, puzzlesAndSolutions[1][1]);
+        assert.deepEqual(solution, {solution: puzzlesAndSolutions[1][1]});
         done();
     });
 });

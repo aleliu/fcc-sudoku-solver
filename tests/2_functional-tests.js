@@ -14,7 +14,7 @@ suite('Functional Tests', () => {
             .send({puzzle: puzzlesAndSolutions[0][0]})
             .end((err, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, puzzlesAndSolutions[0][1]);
+                assert.deepEqual(res.body, {solution: puzzlesAndSolutions[0][1]});
                 done();
             });
     });

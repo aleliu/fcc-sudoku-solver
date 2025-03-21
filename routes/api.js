@@ -14,14 +14,14 @@ module.exports = function (app) {
       let puzzle = req.body.puzzle;
       
       if (!("puzzle" in req.body) || !("coordinate" in req.body) || !("value" in req.body)) return res.json({ error: 'Required field(s) missing' })
-      value = Number(value);
-      [row, col] = req.body.coordinate.split('');
-      numberRow = "abcdefghi".indexOf(row.toLowerCase());
-      col = Number(col);
       let validatePuzzle = solver.validate(puzzle);
       if (validatePuzzle.error != undefined){
         return res.json(validatePuzzle)
       }
+      value = Number(value);
+      [row, col] = req.body.coordinate.split('');
+      numberRow = "abcdefghi".indexOf(row.toLowerCase());
+      col = Number(col);
       if(!value) return res.json({error: "Invalid value"})
       if (numberRow == -1){
         return res.json({ "error": "Invalid coordinate" });
@@ -57,6 +57,6 @@ module.exports = function (app) {
     .post((req, res) => {
       const solver = new SudokuSolver();
       let puzzle = req.body.puzzle;
-      return res.json({solution: solver.solve(puzzle)});
+      return res.json(solver.solve(puzzle));
     });
 };
